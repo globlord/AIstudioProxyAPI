@@ -77,15 +77,13 @@ You can configure various settings in the `config.json` file. Here are some of t
 {
   "port": 3000,
   "headless": false,
-  "timeout": 30000,
-  "chromePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+  "timeout": 30000
 }
 ```
 
 - **port**: Change the port on which the server listens.
 - **headless**: Set to `true` to run in headless mode (not currently supported).
 - **timeout**: Set the timeout for requests in milliseconds.
-- **chromePath**: (Optional) Specify the absolute path to Chrome executable. If not provided or invalid, the system will attempt to find Chrome in default locations.
 
 ## 🌐 Contributing
 
