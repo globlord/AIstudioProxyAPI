@@ -133,4 +133,5 @@ public
 .vscode/
 
 # Custom
-errors/ 
+errors/
+config.json
