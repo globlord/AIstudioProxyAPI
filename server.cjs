@@ -415,7 +415,38 @@ async function interactAndSubmitPrompt(page, prompt, reqId) {
     }
 
     console.log(`[${reqId}]  - 清空并填充输入框...`);
+    
+    // 检测文本大小，决定使用哪种填充方法
+    const TEXT_SIZE_THRESHOLD = 10000; // 10KB阈值
+    if (prompt.length > TEXT_SIZE_THRESHOLD) {
+        console.log(`[${reqId}] 检测到大文本 (${prompt.length} 字符)，使用快速填充模式`);
+        try {
+            // 使用直接DOM操作快速填充
+            await page.evaluate((text) => {
+                const textarea = document.querySelector('ms-prompt-input-wrapper textarea');
+                if (!textarea) throw new Error('Input textarea not found');
+                
+                // 直接设置值
+                textarea.value = text;
+                
+                // 触发必要的事件
+                textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                textarea.dispatchEvent(new Event('change', { bubbles: true }));
+                textarea.dispatchEvent(new Event('blur', { bubbles: true }));
+                
+                // 对于某些框架可能需要额外事件
+                textarea.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+                textarea.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
+            }, prompt);
+            console.log(`[${reqId}] 快速填充完成`);
+        } catch (fastFillError) {
+            console.warn(`[${reqId}] 快速填充失败，回退到标准填充: ${fastFillError.message}`);
+            await inputField.fill(prompt, { timeout: 60000 });
+        }
+    } else {
+        console.log(`[${reqId}] 使用标准填充模式 (${prompt.length} 字符)`);
         await inputField.fill(prompt, { timeout: 60000 });
+    }
 
     console.log(`[${reqId}]  - 等待运行按钮可用...`);
         try {
