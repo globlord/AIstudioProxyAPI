@@ -32,8 +32,24 @@ const CYAN = '\x1b[36m';
 const SERVER_SCRIPT_PATH = path.join(__dirname, SERVER_SCRIPT_FILENAME);
 let playwright; // Loaded in checkDependencies
 
+// --- 读取配置文件 ---
+const configPath = path.join(__dirname, 'config.json');
+let config = {};
+try {
+  config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+} catch (e) {
+}
+
 // --- Platform-Specific Chrome Path ---
 function getChromePath() {
+    // 优先使用配置文件中的路径
+    if (config.chromePath && config.chromePath.trim() !== '') {
+        if (fs.existsSync(config.chromePath)) {
+            return config.chromePath;
+        }
+    }
+    
+    // 回退到默认路径检测
     switch (process.platform) {
         case 'darwin':
             return '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
