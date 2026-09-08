@@ -1,13 +1,13 @@
 // index.js (修改后 - 用于访问本地 server.js 代理)
 
-// 确保已安装 OpenAI SDK: npm install openai
-import OpenAI from "openai";
-import readline from 'readline'; // 引入 readline 模块
+// 确保已安装 OpenAI SDK: pnpm install openai
+const OpenAI = require("openai");
+const readline = require('readline'); // 引入 readline 模块
 
 // --- 配置 ---
 // 1. baseURL: 指向你本地运行的 server.js 代理服务器
 //    server.js 监听 3000 端口，并提供 /v1 路径
-const LOCAL_PROXY_URL = 'http://localhost:2048/v1'; // 确保端口号与 server.js 一致
+const LOCAL_PROXY_URL = process.env.PROXY_URL || 'http://localhost:3000/v1'; // 确保端口号与 server.js 一致
 
 // 2. apiKey: 对于本地代理，这个 key 不会被验证，可以填写任意字符串
 const DUMMY_API_KEY = 'no-key-needed-for-local-proxy';

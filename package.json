@@ -1,8 +1,19 @@
 {
+  "name": "aistudio-proxy-api",
+  "version": "1.0.0",
+  "description": "AI Studio Proxy API to simulate OpenAI API using Playwright CDP",
+  "main": "server.cjs",
+  "scripts": {
+    "start": "node auto_connect_aistudio.cjs",
+    "server": "node server.cjs",
+    "test": "node test.js",
+    "test:multi": "node test_multi.cjs"
+  },
   "dependencies": {
+    "@playwright/test": "^1.44.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "playwright": "^1.44.1",
-    "@playwright/test": "^1.44.1"
+    "openai": "^4.52.0",
+    "playwright": "^1.44.1"
   }
 }

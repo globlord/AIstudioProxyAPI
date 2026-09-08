@@ -7,6 +7,30 @@ const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 
+// --- Load Environment Variables (.env) ---
+if (typeof process.loadEnvFile === 'function') {
+    try { process.loadEnvFile(); } catch (_) {}
+} else {
+    try {
+        const envPath = path.join(__dirname, '.env');
+        if (fs.existsSync(envPath)) {
+            fs.readFileSync(envPath, 'utf8').split(/\r?\n/).forEach(line => {
+                const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+                if (match && !process.env[match[1]]) {
+                    process.env[match[1]] = (match[2] || '').trim().replace(/^['"]|['"]$/g, '');
+                }
+            });
+        }
+    } catch (_) {}
+}
+
+// --- Bypass Proxy for Local Connections ---
+const noProxyEntries = ['127.0.0.1', 'localhost', '::1'];
+const currentNoProxy = process.env.NO_PROXY || process.env.no_proxy || '';
+const newNoProxy = currentNoProxy ? `${currentNoProxy},${noProxyEntries.join(',')}` : noProxyEntries.join(',');
+process.env.NO_PROXY = newNoProxy;
+process.env.no_proxy = newNoProxy;
+
 // --- Configuration ---
 const DEBUGGING_PORT = 8848;
 const TARGET_URL = 'https://aistudio.google.com/prompts/new_chat'; // Target page
@@ -32,26 +56,34 @@ const CYAN = '\x1b[36m';
 const SERVER_SCRIPT_PATH = path.join(__dirname, SERVER_SCRIPT_FILENAME);
 let playwright; // Loaded in checkDependencies
 
-// --- Platform-Specific Chrome Path ---
+// --- Platform-Specific Browser Path (优先 Edge，完全不影响日常 Chrome) ---
 function getChromePath() {
     switch (process.platform) {
         case 'darwin':
-            return '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+            return [
+                '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+                '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+            ].find(p => fs.existsSync(p));
         case 'win32':
-            // 尝试 Program Files 和 Program Files (x86)
+            // 优先使用 Edge，避免干扰用户日常 Chrome
             const winPaths = [
-                path.join(process.env.ProgramFiles || '', 'Google\Chrome\Application\chrome.exe'),
-                path.join(process.env['ProgramFiles(x86)'] || '', 'Google\Chrome\Application\chrome.exe')
+                path.join(process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+                path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+                path.join(process.env.LOCALAPPDATA || '', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+                // 备用 Chrome
+                path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+                path.join(process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+                path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'Application', 'chrome.exe')
             ];
             return winPaths.find(p => fs.existsSync(p));
         case 'linux':
-            // 尝试常见的 Linux 路径
+            // 尝试 Edge 或 Chrome
             const linuxPaths = [
+                '/usr/bin/microsoft-edge',
+                '/usr/bin/microsoft-edge-stable',
                 '/usr/bin/google-chrome',
                 '/usr/bin/google-chrome-stable',
                 '/opt/google/chrome/chrome',
-                // Add path for Flatpak installation if needed
-                // '/var/lib/flatpak/exports/bin/com.google.Chrome'
             ];
             return linuxPaths.find(p => fs.existsSync(p));
         default:
@@ -156,6 +188,10 @@ function killProcesses(pids) {
 
 // --- 创建 Readline Interface ---
 function askQuestion(query) {
+    if (process.argv.includes('-y') || process.argv.includes('--yes') || !process.stdin.isTTY) {
+        console.log(query.trim() + ' (自动确认)');
+        return Promise.resolve('');
+    }
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -306,30 +342,26 @@ async function launchChrome() {
         return false;
     }
 
-    console.log(`   ${GREEN}找到 Chrome 路径:${RESET} ${chromeExecutablePath}`);
+    const isEdge = chromeExecutablePath.toLowerCase().includes('edge');
+    const browserName = isEdge ? 'Microsoft Edge' : 'Google Chrome';
+    console.log(`   ${GREEN}找到浏览器 (${browserName}) 路径:${RESET} ${chromeExecutablePath}`);
 
-    // 只有在明确需要启动新实例时才提示关闭其他实例
-    // (如果上面选择了 'n' 并清理成功，这里 isPortInUse 应该返回 false)
-    if (!isPortInUse(DEBUGGING_PORT)) {
-         console.log(`${YELLOW}⚠️ 重要提示：为了确保新的调试端口生效，建议先手动完全退出所有*其他*可能干扰的 Google Chrome 实例。${RESET}`);
-         console.log('   (在 macOS 上通常是 Cmd+Q，Windows/Linux 上是关闭所有窗口)');
-         await askQuestion('请确认已处理好其他 Chrome 实例，然后按 Enter 键继续启动...');
-    } else {
-         // 理论上不应该到这里，因为端口已被清理或选择了 use_existing
-         console.warn(`   ${YELLOW}警告：端口 ${DEBUGGING_PORT} 意外地仍被占用。继续尝试启动，但这极有可能失败。${RESET}`);
-         await askQuestion('请按 Enter 键继续尝试启动...');
-    }
+    // 使用独立的用户数据目录，完全不影响用户平时使用的浏览器
+    const profileFolder = isEdge ? 'AIstudioProxy_Edge' : 'AIstudioProxy_Chrome';
+    const userDataDir = path.join(process.env.LOCALAPPDATA || __dirname, profileFolder);
 
-
-    console.log(`正在尝试启动 Chrome...`);
+    console.log(`正在尝试启动 ${browserName} (独立配置文件模式)...`);
     console.log(`  路径: "${chromeExecutablePath}"`);
-    // --- 修改：添加启动参数 ---
+    console.log(`  用户数据目录: "${userDataDir}"`);
+
     const chromeArgs = [
         `--remote-debugging-port=${DEBUGGING_PORT}`,
-        `--window-size=460,800` // 指定宽度为 460px，高度暂定为 800px (可以根据需要调整)
-        // 你可以在这里添加其他需要的 Chrome 启动参数
+        `--user-data-dir=${userDataDir}`,
+        `--window-size=460,800`,
+        '--no-first-run',
+        '--no-default-browser-check'
     ];
-    console.log(`  参数: ${chromeArgs.join(' ')}`); // 打印所有参数
+    console.log(`  参数: ${chromeArgs.join(' ')}`);
 
     try {
         const chromeProcess = spawn(
