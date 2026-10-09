@@ -63,18 +63,20 @@ const chromeExecutablePath = getChromePath();
 
 // --- 端口检查函数 ---
 function isPortInUse(port) {
+    const portNum = parseInt(port, 10);
+    if (isNaN(portNum) || portNum < 1 || portNum > 65535) return false;
     const platform = process.platform;
     let command;
-    // console.log(`${DIM}   检查端口 ${port}...${RESET}`); // Optional: Verbose check
+    // console.log(`${DIM}   检查端口 ${portNum}...${RESET}`); // Optional: Verbose check
     try {
         if (platform === 'win32') {
             // 在 Windows 上，查找监听状态的 TCP 端口
-            command = `netstat -ano | findstr LISTENING | findstr :${port}`;
+            command = `netstat -ano | findstr LISTENING | findstr :${portNum}`;
             execSync(command); // 如果找到，不会抛出错误
             return true;
         } else if (platform === 'darwin' || platform === 'linux') {
             // 在 macOS 或 Linux 上，查找监听该端口的进程
-            command = `lsof -i tcp:${port} -sTCP:LISTEN`;
+            command = `lsof -i tcp:${portNum} -sTCP:LISTEN`;
             execSync(command); // 如果找到，不会抛出错误
             return true;
         }
